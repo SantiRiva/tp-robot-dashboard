@@ -43,7 +43,7 @@ El frontend consulta `/info` y recibe actualizaciones de `/ws`; reintenta la con
 
 ## Estado
 
-Primera versión conectada y probada con el simulador Go2. Pendiente: gráficos históricos y mejoras de visualización. Algunos valores del simulador son derivados, no mediciones físicas. Consultar `simulador/API.md`.
+Primera versión conectada y probada con el simulador Go2. Incluye gráfico de ángulos en vivo con selector de motor e historial de los últimos 30 segundos; se reinicia al reconectar. Pendiente: mejoras de visualización de temperaturas y patas. Algunos valores del simulador son derivados, no mediciones físicas. Consultar `simulador/API.md`.
 
 ## Verificar el frontend
 
@@ -58,3 +58,4 @@ npm run build
 El contenido de `simulador/` proviene del TP05 de [tsamaan/UadeRobotLab](https://github.com/tsamaan/UadeRobotLab/tree/main/05LaboratoriosTPs/TP05_Desarrollo_de_Aplicaciones_II). Se conserva su documentación. Los modelos Unitree conservan su licencia BSD de tres cláusulas en `simulador/entorno/sim/unitree_mujoco/LICENSE`. La documentación de instalación original contiene ejemplos genéricos de otros TPs; para este proyecto usar el lanzador TP05 indicado arriba.
 
 No se incluyen dependencias instaladas, cachés, entornos virtuales ni estado temporal del simulador. Se regeneran al instalar o ejecutar.
+
