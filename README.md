@@ -1,10 +1,28 @@
 # TP Robot Dashboard
 
-Frontend React para Desarrollo de Aplicaciones II (UADE).
+Trabajo práctico de Desarrollo de Aplicaciones II (UADE): frontend React que visualiza telemetría de robots Unitree.
 
-## Ejecutar el frontend
+## Contenido
 
-Requiere Node.js 22.12 o superior compatible con Vite 8.
+- `mi_dashboard/`: frontend React + Vite desarrollado para el TP.
+- `simulador/`: entorno TP05 original con backend, simulador, modelos Go2/G1 y consignas.
+
+## 1. Encender el simulador y el backend (Windows)
+
+Instalar Python 3.10 o superior. Desde la raíz del repositorio:
+
+```powershell
+py -3 -m pip install -r simulador/requirements.txt
+.\simulador\INICIAR_TP05.bat
+```
+
+Elegir `2` para Go2 o `1` para G1. Mantener el simulador y el backend abiertos.
+Si MuJoCo falla al cargar una DLL, consultar `simulador/INSTALACION.md` (Visual C++ Redistributable).
+En Linux/macOS, instalar las mismas dependencias con Python y ejecutar `bash simulador/INICIAR_TP05.sh`.
+
+## 2. Encender el frontend
+
+Requiere Node.js 22.12 o superior compatible con Vite 8. Abrir otra terminal:
 
 ```powershell
 cd mi_dashboard
@@ -12,27 +30,22 @@ npm install
 npm run dev
 ```
 
-Abrir la dirección que muestra Vite (habitualmente http://localhost:5173).
-En PowerShell, si la política bloquea npm.ps1, usar npm.cmd en lugar de npm.
+Abrir la dirección que imprime Vite (habitualmente http://localhost:5173).
+En PowerShell, si se bloquea npm.ps1, usar npm.cmd en lugar de npm.
 
-## Conectar el robot
+## 3. Conectar
 
-1. En el paquete UadeRobotLab, abrir `05LaboratoriosTPs/TP05_Desarrollo_de_Aplicaciones_II/INICIAR_TP05.bat`.
-2. Elegir Go2 o G1 y mantener el entorno abierto.
-3. Probar `http://localhost:8001/telemetria`. Si el backend está en otra PC, usar la IP que muestra el lanzador.
-4. Ingresar esa dirección base en el dashboard y pulsar Conectar robot.
+En el dashboard, ingresar `http://localhost:8001` y pulsar **Conectar robot**.
+Si el backend está en otra computadora, usar la IP que muestra el lanzador.
+Para diagnosticar, abrir `http://localhost:8001/telemetria`: debe mostrar JSON.
 
-El frontend consulta /info y recibe datos de /ws. Reintenta la conexión cada 3 segundos; no inventa valores cuando no hay servidor.
+El frontend consulta `/info` y recibe actualizaciones de `/ws`; reintenta la conexión cada 3 segundos. Muestra batería, orientación, motores y apoyo de patas del Go2. No genera datos falsos cuando no hay conexión.
 
-## Estructura
+## Estado
 
-- `mi_dashboard/src/App.jsx`: pantalla, consulta de información y conexión WebSocket.
-- `mi_dashboard/src/index.css`: estilos adaptables a móvil.
-- `mi_dashboard/src/main.jsx`: entrada de React.
+Primera versión conectada y probada con el simulador Go2. Pendiente: gráficos históricos y mejoras de visualización. Algunos valores del simulador son derivados, no mediciones físicas. Consultar `simulador/API.md`.
 
-Esta primera versión muestra batería, orientación, motores y apoyo de patas del Go2. Pendiente: gráficos históricos y pruebas con el simulador en ejecución. Los valores derivados de la simulación no equivalen a mediciones físicas.
-
-## Verificación
+## Verificar el frontend
 
 ```powershell
 cd mi_dashboard
@@ -40,6 +53,8 @@ npm run lint
 npm run build
 ```
 
-El backend y los modelos se mantienen en el paquete original; para entregar, esta carpeta mi_dashboard se puede colocar dentro del TP05.
+## Procedencia
 
-Consigna: https://github.com/tsamaan/UadeRobotLab/tree/main/05LaboratoriosTPs/TP05_Desarrollo_de_Aplicaciones_II
+El contenido de `simulador/` proviene del TP05 de [tsamaan/UadeRobotLab](https://github.com/tsamaan/UadeRobotLab/tree/main/05LaboratoriosTPs/TP05_Desarrollo_de_Aplicaciones_II). Se conserva su documentación. Los modelos Unitree conservan su licencia BSD de tres cláusulas en `simulador/entorno/sim/unitree_mujoco/LICENSE`. La documentación de instalación original contiene ejemplos genéricos de otros TPs; para este proyecto usar el lanzador TP05 indicado arriba.
+
+No se incluyen dependencias instaladas, cachés, entornos virtuales ni estado temporal del simulador. Se regeneran al instalar o ejecutar.
