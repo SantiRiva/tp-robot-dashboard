@@ -43,12 +43,13 @@ El frontend consulta `/info` y recibe actualizaciones de `/ws`; reintenta la con
 
 ## Estado
 
-Primera versión conectada y probada con el simulador Go2. Incluye gráfico de ángulos en vivo con selector de motor e historial de los últimos 30 segundos; se reinicia al reconectar. Incluye barras de temperatura por motor, promedio y máxima actual (naranja indica comparación, no alarma). Incluye diagrama superior de las cuatro patas del Go2 (apoyada, en el aire o sin dato), oculto para G1. Pendiente: pruebas completas de reconexión y preparación de entrega. Algunos valores del simulador son derivados, no mediciones físicas. Consultar `simulador/API.md`.
+Primera versión conectada y probada con el simulador Go2. Incluye gráfico de ángulos en vivo con selector de motor e historial de los últimos 30 segundos; se reinicia al reconectar. Incluye barras de temperatura por motor, promedio y máxima actual (naranja indica comparación, no alarma). Incluye diagrama superior de las cuatro patas del Go2 (apoyada, en el aire o sin dato), oculto para G1. La reconexión cuenta con pruebas automatizadas de cortes, datos congelados, tiempos de espera y desconexión manual. Pendiente: validación manual completa en navegador y preparación de entrega. Algunos valores del simulador son derivados, no mediciones físicas. Consultar `simulador/API.md`.
 
 ## Verificar el frontend
 
 ```powershell
 cd mi_dashboard
+npm test
 npm run lint
 npm run build
 ```
@@ -58,3 +59,13 @@ npm run build
 El contenido de `simulador/` proviene del TP05 de [tsamaan/UadeRobotLab](https://github.com/tsamaan/UadeRobotLab/tree/main/05LaboratoriosTPs/TP05_Desarrollo_de_Aplicaciones_II). Se conserva su documentación. Los modelos Unitree conservan su licencia BSD de tres cláusulas en `simulador/entorno/sim/unitree_mujoco/LICENSE`. La documentación de instalación original contiene ejemplos genéricos de otros TPs; para este proyecto usar el lanzador TP05 indicado arriba.
 
 No se incluyen dependencias instaladas, cachés, entornos virtuales ni estado temporal del simulador. Se regeneran al instalar o ejecutar.
+
+### Comportamiento ante cortes
+
+- Si se cierra el backend, se limpian los datos y el historial y se reintenta cada 3 segundos.
+- Si el backend repite el mismo tiempo de telemetría (`ts`) durante 10 segundos, se considera que el robot dejó de actualizarse, aunque lleguen mensajes WebSocket.
+- Las consultas HTTP y la apertura del WebSocket tienen un límite de espera de 10 segundos.
+- Solo un dato nuevo recupera el estado En vivo. Un reinicio del reloj de telemetría inicia un historial nuevo.
+- Desconectar cancela las conexiones, consultas y reintentos pendientes.
+
+Prueba manual: conectar Go2; cerrar el backend y comprobar Reconectando; iniciarlo de nuevo y comprobar En vivo. Luego cerrar solo el simulador, esperar 10 segundos y comprobar que desaparezcan los valores antiguos; iniciarlo de nuevo y verificar recuperación. Finalmente pulsar Desconectar y comprobar que no reconecte solo.

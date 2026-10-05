@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 export default function AngleChart({ history, motors, live }) {
   const [selected, setSelected] = useState('')
-  const motor = motors.find(m => String(m.id) === selected) || motors[1] || motors[0]
+  const motor = motors.find(m => String(m.id) === selected) || motors.find(m => /thigh|knee/i.test(m.nombre)) || motors[0]
   const end = history.at(-1)?.time ?? 0
   const points = history.map(sample => ({ t: sample.time, value: sample.angles[motor?.id] }))
   const values = points.map(p => p.value).filter(Number.isFinite)
@@ -33,4 +33,3 @@ export default function AngleChart({ history, motors, live }) {
     <p className="chart-note">Podés cambiar de motor sin perder su historial. El registro se reinicia al reconectar.</p>
   </section>
 }
-

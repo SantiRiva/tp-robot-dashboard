@@ -3,6 +3,7 @@ import './App.css'
 import AngleChart from './AngleChart'
 import MotorTemperatures from './MotorTemperatures'
 import FootDiagram from './FootDiagram'
+import { connectTelemetry } from './telemetryConnection'
 
 const number = (value, unit = '') => Number.isFinite(value) ? `${value.toFixed(1)}${unit}` : '—'
 
@@ -17,67 +18,17 @@ export default function App() {
 
   useEffect(() => {
     if (!endpoint) return
-    let stopped = false
-    let socket
-    let retry
-    let watchdog
-    let lastMessage = Date.now()
-    const controller = new AbortController()
-    const connect = async () => {
-      setStatus('Conectando…')
-      try {
-        const response = await fetch(`${endpoint}/info`, { signal: controller.signal })
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        const details = await response.json()
-        if (stopped) return
-        setInfo(details)
-        const url = new URL(`${endpoint}/ws`)
-        url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:'
-        socket = new WebSocket(url)
-        socket.onopen = () => { lastMessage = Date.now(); setHistory([]); setStatus('Esperando datos…') }
-        socket.onmessage = (event) => {
-          if (stopped) return
-          try {
-            const snapshot = JSON.parse(event.data)
-            if (!Array.isArray(snapshot.motores) || !snapshot.bms || !snapshot.imu) throw new Error('Formato inesperado')
-            lastMessage = Date.now()
-            setData(snapshot)
-            const time = performance.now() / 1000
-            const angles = Object.fromEntries(snapshot.motores.map(m => [m.id, m.angulo]))
-            setHistory(previous => [...previous.filter(sample => time - sample.time <= 30), { time, angles }].slice(-600))
-            setStatus('En vivo')
-            setError('')
-          } catch { setError('El servidor envió datos con un formato inesperado.') }
-        }
-        socket.onerror = () => socket.close()
-        socket.onclose = () => {
-          if (stopped) return
-          setData(null)
-          setStatus('Reconectando…')
-          retry = setTimeout(connect, 3000)
-        }
-      } catch {
-        if (stopped) return
-        setStatus('Reconectando…')
-        setError('No se pudo conectar. Revisá que INICIAR_TP05.bat esté abierto y la dirección sea correcta.')
-        retry = setTimeout(connect, 3000)
-      }
-    }
-    connect()
-    watchdog = setInterval(() => {
-      if (Date.now() - lastMessage > 10000 && socket?.readyState === WebSocket.OPEN) {
-        setData(null)
-        setError('El servidor dejó de enviar datos. Intentando reconectar…')
-        socket.close()
-      }
-    }, 2000)
-    return () => {
-      stopped = true
-      controller.abort()
-      clearTimeout(retry)
-      clearInterval(watchdog)
-      socket?.close()
-    }
+    return connectTelemetry(endpoint, {
+      info: setInfo,
+      state: (nextStatus, message) => { setStatus(nextStatus); setError(message) },
+      reset: () => { setData(null); setHistory([]) },
+      snapshot: snapshot => {
+        setData(snapshot)
+        const time = performance.now() / 1000
+        const angles = Object.fromEntries(snapshot.motores.map(m => [m.id, m.angulo]))
+        setHistory(previous => [...previous.filter(sample => time - sample.time <= 30), { time, angles }].slice(-600))
+      },
+    })
   }, [endpoint])
 
   function handleConnect(event) {
