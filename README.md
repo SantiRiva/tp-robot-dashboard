@@ -81,3 +81,7 @@ Pruebas del lanzador: `py -3 simulador/entorno/test_iniciar_tp05.py`.
 ### Inclinación visual
 
 El dashboard incluye horizonte artificial (roll/pitch) y rumbo relativo (yaw). El rumbo cero es la referencia del entorno, no el norte geográfico. El dibujo limita pitch a ±45° y mantiene el valor numérico completo; al desconectar muestra Sin datos.
+
+### Captura y exportación CSV
+
+En Capturar y exportar, pulsar Capturar muestra mientras el estado sea En vivo. Cada clic guarda una fila con fecha UTC, modelo, modo y telemetría. Exportar CSV descarga todas las muestras con coma o punto y coma, UTF-8 con BOM y punto decimal. El archivo conserva columnas separadas para motores de distintos modelos. Descartar muestras pide confirmación. Máximo: 1000 capturas por registro. Las muestras sobreviven a la desconexión pero se pierden al recargar o cerrar la página: exportarlas antes. La exportación está disponible sin conexión.
