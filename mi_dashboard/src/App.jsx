@@ -3,6 +3,7 @@ import './App.css'
 import AngleChart from './AngleChart'
 import MotorTemperatures from './MotorTemperatures'
 import FootDiagram from './FootDiagram'
+import OrientationPanel from './OrientationPanel'
 import { connectTelemetry } from './telemetryConnection'
 
 const number = (value, unit = '') => Number.isFinite(value) ? `${value.toFixed(1)}${unit}` : '—'
@@ -66,6 +67,7 @@ export default function App() {
         <article><h2>Batería</h2><strong>{number(data?.bms?.soc, '%')}</strong><p>Carga disponible</p></article>
         <article><h2>Inclinación</h2><strong>{number(data?.imu?.pitch, '°')}</strong><p>Pitch · Roll {number(data?.imu?.roll, '°')} · Yaw {number(data?.imu?.yaw, '°')}</p></article>
       </section>
+      <OrientationPanel imu={data?.imu} live={status === 'En vivo'} />
       <MotorTemperatures motors={data?.motores || []} mode={info?.modo} />
       <AngleChart key={info?.modelo || 'none'} history={history} motors={data?.motores || []} live={status === 'En vivo'} />
       <section className="panel"><div className="section-title"><h2>Motores</h2><span>Ángulos y temperaturas</span></div>

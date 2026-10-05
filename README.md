@@ -77,3 +77,7 @@ Prueba manual: conectar Go2; cerrar el backend y comprobar Reconectando; iniciar
 El lector de telemetría verifica el modelo mediante el saludo del simulador. Ante una discrepancia rechaza sus datos para evitar mostrar motores G1 con etiquetas Go2.
 
 Pruebas del lanzador: `py -3 simulador/entorno/test_iniciar_tp05.py`.
+
+### Inclinación visual
+
+El dashboard incluye horizonte artificial (roll/pitch) y rumbo relativo (yaw). El rumbo cero es la referencia del entorno, no el norte geográfico. El dibujo limita pitch a ±45° y mantiene el valor numérico completo; al desconectar muestra Sin datos.
