@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import AngleChart from './AngleChart'
 import MotorTemperatures from './MotorTemperatures'
+import FootDiagram from './FootDiagram'
 
 const number = (value, unit = '') => Number.isFinite(value) ? `${value.toFixed(1)}${unit}` : '—'
 
@@ -119,7 +120,7 @@ export default function App() {
       <section className="panel"><div className="section-title"><h2>Motores</h2><span>Ángulos y temperaturas</span></div>
         {data ? <div className="table-wrap"><table><thead><tr><th>Motor</th><th>Ángulo</th><th>Temperatura</th><th>Torque</th></tr></thead><tbody>{data.motores.map(m => <tr key={m.id}><td>{m.nombre}</td><td>{number(m.angulo, '°')}</td><td>{number(m.temperatura, ' °C')}</td><td>{number(m.torque, ' Nm')}</td></tr>)}</tbody></table></div> : <div className="empty"><span>◎</span><h3>Listo para recibir telemetría</h3><p>Abrí INICIAR_TP05.bat, elegí un robot y conectá su dirección arriba.</p><small>Los datos aparecerán cuando el backend los envíe.</small></div>}
       </section>
-      {info?.modelo === 'go2' && data && <section className="panel"><h2>Apoyo de patas</h2><div className="feet">{Object.entries(data.fuerzas || {}).map(([name, value]) => <span key={name}>{name}: {value ? 'Apoyada' : 'En el aire'}</span>)}</div></section>}
+      <FootDiagram model={info?.modelo} forces={data?.fuerzas} live={status === 'En vivo'} />
       <footer>Primera versión · React + WebSocket <span>En simulación, varios valores son derivados; no son mediciones del robot físico.</span></footer>
     </main>
   )

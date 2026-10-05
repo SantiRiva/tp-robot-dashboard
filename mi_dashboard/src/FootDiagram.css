@@ -1,0 +1,17 @@
+.foot-description { margin: 12px 0 0; color: #64796f; font-size: 12px; }
+.foot-diagram { display: grid; grid-template-columns: minmax(0, 1fr) 110px minmax(0, 1fr); grid-template-rows: 32px 1fr 1fr; gap: 22px; max-width: 700px; margin: 24px auto; }
+.robot-heading { grid-column: 2; grid-row: 1; text-align: center; font-size: 11px; letter-spacing: 2px; color: #64796f; }
+.robot-body { grid-column: 2; grid-row: 2 / 4; align-self: stretch; border-radius: 35px 35px 24px 24px; background: #e4ebe6; border: 2px solid #b6c9bc; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 235px; }
+.robot-body > span { font-size: 25px; font-weight: 700; letter-spacing: 2px; }
+.robot-body small { font-size: 9px; letter-spacing: 2px; color: #64796f; }
+.robot-eyes { display: flex; gap: 22px; margin-bottom: 25px; }
+.robot-eyes i { width: 7px; height: 7px; background: #214f40; border-radius: 50%; }
+.foot-indicator { border: 1px solid #cbd4ce; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 8px; background: #f2f4f3; min-width: 0; }
+.front-left { grid-column: 1; grid-row: 2; }.front-right { grid-column: 3; grid-row: 2; }.rear-left { grid-column: 1; grid-row: 3; }.rear-right { grid-column: 3; grid-row: 3; }
+.foot-code { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; }
+.foot-dot { width: 12px; height: 12px; flex-shrink: 0; border-radius: 50%; background: #8a9790; }
+.foot-name { font-size: 12px; color: #50685c; }.foot-indicator strong { font-size: 14px; }
+.foot-ground { background: #e2f3e7; border-color: #6da983; }.foot-ground .foot-dot { background: #267f5d; }
+.foot-unknown { background: #fff; border-style: dashed; }.foot-unknown .foot-dot { background: transparent; border: 2px dashed #8a9790; }
+.foot-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 24px; font-size: 12px; margin-bottom: 20px; }.foot-legend span { display: flex; align-items: center; gap: 7px; }.foot-legend i { width: 10px; height: 10px; border-radius: 50%; }.legend-ground { background: #267f5d; }.legend-air { background: #8a9790; }.legend-unknown { border: 1px dashed #8a9790; }
+@media(max-width:550px) { .foot-diagram { grid-template-columns: minmax(0,1fr) 48px minmax(0,1fr); gap: 10px; }.foot-indicator { padding: 10px; }.foot-name { font-size: 11px; }.robot-body { border-radius: 20px; }.robot-body > span { font-size: 15px; letter-spacing: 0; }.robot-body small { display: none; }.robot-eyes { gap: 10px; }.robot-heading { font-size: 9px; letter-spacing: 0; }.foot-panel .section-title { flex-wrap: wrap; } }

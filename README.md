@@ -43,7 +43,7 @@ El frontend consulta `/info` y recibe actualizaciones de `/ws`; reintenta la con
 
 ## Estado
 
-Primera versión conectada y probada con el simulador Go2. Incluye gráfico de ángulos en vivo con selector de motor e historial de los últimos 30 segundos; se reinicia al reconectar. Incluye barras de temperatura por motor, promedio y máxima actual (naranja indica comparación, no alarma). Pendiente: mejoras de visualización de patas. Algunos valores del simulador son derivados, no mediciones físicas. Consultar `simulador/API.md`.
+Primera versión conectada y probada con el simulador Go2. Incluye gráfico de ángulos en vivo con selector de motor e historial de los últimos 30 segundos; se reinicia al reconectar. Incluye barras de temperatura por motor, promedio y máxima actual (naranja indica comparación, no alarma). Incluye diagrama superior de las cuatro patas del Go2 (apoyada, en el aire o sin dato), oculto para G1. Pendiente: pruebas completas de reconexión y preparación de entrega. Algunos valores del simulador son derivados, no mediciones físicas. Consultar `simulador/API.md`.
 
 ## Verificar el frontend
 
