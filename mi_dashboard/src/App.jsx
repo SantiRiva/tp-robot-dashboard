@@ -25,8 +25,8 @@ export default function App() {
       snapshot: snapshot => {
         setData(snapshot)
         const time = performance.now() / 1000
-        const angles = Object.fromEntries(snapshot.motores.map(m => [m.id, m.angulo]))
-        setHistory(previous => [...previous.filter(sample => time - sample.time <= 30), { time, angles }].slice(-600))
+        const readings = Object.fromEntries(snapshot.motores.map(m => [m.id, m]))
+        setHistory(previous => [...previous.filter(sample => time - sample.time <= 30), { time, readings }].slice(-600))
       },
     })
   }, [endpoint])
@@ -67,7 +67,7 @@ export default function App() {
         <article><h2>Inclinación</h2><strong>{number(data?.imu?.pitch, '°')}</strong><p>Pitch · Roll {number(data?.imu?.roll, '°')} · Yaw {number(data?.imu?.yaw, '°')}</p></article>
       </section>
       <MotorTemperatures motors={data?.motores || []} mode={info?.modo} />
-      <AngleChart history={history} motors={data?.motores || []} live={status === 'En vivo'} />
+      <AngleChart key={info?.modelo || 'none'} history={history} motors={data?.motores || []} live={status === 'En vivo'} />
       <section className="panel"><div className="section-title"><h2>Motores</h2><span>Ángulos y temperaturas</span></div>
         {data ? <div className="table-wrap"><table><thead><tr><th>Motor</th><th>Ángulo</th><th>Temperatura</th><th>Torque</th></tr></thead><tbody>{data.motores.map(m => <tr key={m.id}><td>{m.nombre}</td><td>{number(m.angulo, '°')}</td><td>{number(m.temperatura, ' °C')}</td><td>{number(m.torque, ' Nm')}</td></tr>)}</tbody></table></div> : <div className="empty"><span>◎</span><h3>Listo para recibir telemetría</h3><p>Abrí INICIAR_TP05.bat, elegí un robot y conectá su dirección arriba.</p><small>Los datos aparecerán cuando el backend los envíe.</small></div>}
       </section>

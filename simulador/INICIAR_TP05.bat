@@ -98,13 +98,7 @@ goto :eof
 :python_encontrado
 
 
-echo    Abriendo el simulador...
-REM `start /d` en vez de `cmd /c "cd ... ^&^& ..."`: las comillas anidadas
-REM del segundo rompen cuando la ruta de Python tiene espacios, que es el
-REM caso de C:\Program Files\Python312\python.exe.
-start "Simulador" /d entorno "%PYTHON%" %PYARGS% -m sim --robot %ROBOT% --materia tp05
-timeout /t 8 >nul
-
-"%PYTHON%" %PYARGS% entorno\arrancar_api.py --robot %ROBOT%
+"%PYTHON%" %PYARGS% entorno\iniciar_tp05.py --robot %ROBOT%
 echo.
 pause
+

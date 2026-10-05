@@ -87,6 +87,13 @@ class TelemetryReader:
                                       timeout=3.0) as sock:
             sock.settimeout(3.0)
             with sock.makefile("rwb") as canal:
+                canal.write(b'{"orden": "hola"}\n')
+                canal.flush()
+                saludo = json.loads(canal.readline().decode("utf-8"))
+                if saludo.get("robot") != self.modelo:
+                    with self._lock:
+                        self._snapshot = None
+                    raise RuntimeError(f"Backend {self.modelo}: el simulador es {saludo.get('robot')}")
                 self._aviso_dado = False
                 while not self._cortar.is_set():
                     canal.write(b'{"orden": "telemetria"}\n')
@@ -143,3 +150,4 @@ try:
     from telemetry_reader_dds import DemoReader          # noqa: F401
 except ImportError:                                      # pragma: no cover
     DemoReader = None
+

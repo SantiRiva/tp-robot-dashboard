@@ -43,7 +43,7 @@ El frontend consulta `/info` y recibe actualizaciones de `/ws`; reintenta la con
 
 ## Estado
 
-Primera versión conectada y probada con el simulador Go2. Incluye gráfico de ángulos en vivo con selector de motor e historial de los últimos 30 segundos; se reinicia al reconectar. Incluye barras de temperatura por motor, promedio y máxima actual (naranja indica comparación, no alarma). Incluye diagrama superior de las cuatro patas del Go2 (apoyada, en el aire o sin dato), oculto para G1. La reconexión cuenta con pruebas automatizadas de cortes, datos congelados, tiempos de espera y desconexión manual. Pendiente: validación manual completa en navegador y preparación de entrega. Algunos valores del simulador son derivados, no mediciones físicas. Consultar `simulador/API.md`.
+Primera versión conectada y probada con el simulador Go2. Incluye gráfico de ángulos en vivo con selección de hasta cuatro motores y magnitudes (ángulo, temperatura, velocidad y torque) e historial de los últimos 30 segundos; se reinicia al reconectar. Incluye barras de temperatura por motor, promedio y máxima actual (naranja indica comparación, no alarma). Incluye diagrama superior de las cuatro patas del Go2 (apoyada, en el aire o sin dato), oculto para G1. La reconexión cuenta con pruebas automatizadas de cortes, datos congelados, tiempos de espera y desconexión manual. Pendiente: validación manual completa en navegador y preparación de entrega. Algunos valores del simulador son derivados, no mediciones físicas. Consultar `simulador/API.md`.
 
 ## Verificar el frontend
 
@@ -69,3 +69,11 @@ No se incluyen dependencias instaladas, cachés, entornos virtuales ni estado te
 - Desconectar cancela las conexiones, consultas y reintentos pendientes.
 
 Prueba manual: conectar Go2; cerrar el backend y comprobar Reconectando; iniciarlo de nuevo y comprobar En vivo. Luego cerrar solo el simulador, esperar 10 segundos y comprobar que desaparezcan los valores antiguos; iniciarlo de nuevo y verificar recuperación. Finalmente pulsar Desconectar y comprobar que no reconecte solo.
+
+### Arranque coordinado en Windows
+
+`INICIAR_TP05.bat` comprueba el robot y el backend antes de abrir procesos. Reutiliza un backend del mismo modelo en modo simulador; si hay un robot diferente o un puerto ocupado, explica qué consola cerrar. No termina procesos ajenos automáticamente. Para cambiar de Go2 a G1, cerrar el simulador y la consola del backend anterior con Ctrl+C y volver a elegir el robot.
+
+El lector de telemetría verifica el modelo mediante el saludo del simulador. Ante una discrepancia rechaza sus datos para evitar mostrar motores G1 con etiquetas Go2.
+
+Pruebas del lanzador: `py -3 simulador/entorno/test_iniciar_tp05.py`.
