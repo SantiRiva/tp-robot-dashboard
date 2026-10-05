@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import AngleChart from './AngleChart'
+import MotorTemperatures from './MotorTemperatures'
 
 const number = (value, unit = '') => Number.isFinite(value) ? `${value.toFixed(1)}${unit}` : '—'
 
@@ -113,6 +114,7 @@ export default function App() {
         <article><h2>Batería</h2><strong>{number(data?.bms?.soc, '%')}</strong><p>Carga disponible</p></article>
         <article><h2>Inclinación</h2><strong>{number(data?.imu?.pitch, '°')}</strong><p>Pitch · Roll {number(data?.imu?.roll, '°')} · Yaw {number(data?.imu?.yaw, '°')}</p></article>
       </section>
+      <MotorTemperatures motors={data?.motores || []} mode={info?.modo} />
       <AngleChart history={history} motors={data?.motores || []} live={status === 'En vivo'} />
       <section className="panel"><div className="section-title"><h2>Motores</h2><span>Ángulos y temperaturas</span></div>
         {data ? <div className="table-wrap"><table><thead><tr><th>Motor</th><th>Ángulo</th><th>Temperatura</th><th>Torque</th></tr></thead><tbody>{data.motores.map(m => <tr key={m.id}><td>{m.nombre}</td><td>{number(m.angulo, '°')}</td><td>{number(m.temperatura, ' °C')}</td><td>{number(m.torque, ' Nm')}</td></tr>)}</tbody></table></div> : <div className="empty"><span>◎</span><h3>Listo para recibir telemetría</h3><p>Abrí INICIAR_TP05.bat, elegí un robot y conectá su dirección arriba.</p><small>Los datos aparecerán cuando el backend los envíe.</small></div>}
@@ -122,4 +124,3 @@ export default function App() {
     </main>
   )
 }
-
