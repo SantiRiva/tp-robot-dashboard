@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import AngleChart from './AngleChart'
 import MotorTemperatures from './MotorTemperatures'
+import TemperatureBadge from './TemperatureBadge'
 import FootDiagram from './FootDiagram'
 import OrientationPanel from './OrientationPanel'
 import SampleCapture from './SampleCapture'
@@ -73,7 +74,7 @@ export default function App() {
       <MotorTemperatures motors={data?.motores || []} mode={info?.modo} />
       <AngleChart key={info?.modelo || 'none'} history={history} motors={data?.motores || []} live={status === 'En vivo'} />
       <section className="panel"><div className="section-title"><h2>Motores</h2><span>Ángulos y temperaturas</span></div>
-        {data ? <div className="table-wrap"><table><thead><tr><th>Motor</th><th>Ángulo</th><th>Temperatura</th><th>Torque</th></tr></thead><tbody>{data.motores.map(m => <tr key={m.id}><td>{m.nombre}</td><td>{number(m.angulo, '°')}</td><td>{number(m.temperatura, ' °C')}</td><td>{number(m.torque, ' Nm')}</td></tr>)}</tbody></table></div> : <div className="empty"><span>◎</span><h3>Listo para recibir telemetría</h3><p>Abrí INICIAR_TP05.bat, elegí un robot y conectá su dirección arriba.</p><small>Los datos aparecerán cuando el backend los envíe.</small></div>}
+        {data ? <div className="table-wrap"><table><thead><tr><th>Motor</th><th>Ángulo</th><th>Temperatura</th><th>Torque</th></tr></thead><tbody>{data.motores.map(m => <tr key={m.id}><td>{m.nombre}</td><td>{number(m.angulo, '°')}</td><td><TemperatureBadge value={m.temperatura} /></td><td>{number(m.torque, ' Nm')}</td></tr>)}</tbody></table></div> : <div className="empty"><span>◎</span><h3>Listo para recibir telemetría</h3><p>Abrí INICIAR_TP05.bat, elegí un robot y conectá su dirección arriba.</p><small>Los datos aparecerán cuando el backend los envíe.</small></div>}
       </section>
       <FootDiagram model={info?.modelo} forces={data?.fuerzas} live={status === 'En vivo'} />
       <footer>Primera versión · React + WebSocket <span>En simulación, varios valores son derivados; no son mediciones del robot físico.</span></footer>

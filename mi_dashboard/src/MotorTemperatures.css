@@ -11,10 +11,19 @@
 .temperature-track { height: 9px; margin: 14px 0 9px; background: #e4ebe6; overflow: hidden; border-radius: 8px; }
 .temperature-track > div { height: 100%; background: #267f5d; border-radius: inherit; transition: width 250ms linear; }
 .temperature-motor small { font-size: 11px; color: #64796f; }
-.temperature-maximum { border-color: #d5ab78; background: #fff9f0; }
-.temperature-maximum .temperature-track > div { background: #b97a2d; }
-.temperature-maximum small { color: #805323; }
 .temperature-empty { text-align: center; padding: 36px 12px; color: #64796f; font-size: 14px; }
 @media (max-width: 900px) { .temperature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 550px) { .temperature-grid { grid-template-columns: 1fr; } .temperatures .section-title { flex-direction: column; } }
 @media (prefers-reduced-motion: reduce) { .temperature-track > div { transition: none; } }
+
+.temperature-normal { --temp-color: #267f5d; --temp-bg: #e2f3e7; }
+.temperature-warning { --temp-color: #d4a800; --temp-bg: #fff8cc; }
+.temperature-critical { --temp-color: #c43535; --temp-bg: #ffe9e7; }
+.temperature-unknown { --temp-color: #8a9790; --temp-bg: #f2f4f3; }
+.temperature-motor { background: var(--temp-bg); border-color: var(--temp-color); }
+.temperature-motor .temperature-track > div { background: var(--temp-color); }
+.temperature-badge { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 7px; padding: 7px 10px; border-radius: 6px; background: var(--temp-bg); color: #18332d; }
+.temperature-badge > span { font-size: 11px; }
+.temperature-badge i, .temperature-legend i { display: inline-block; flex-shrink: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--temp-color); }
+.temperature-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 10px 22px; padding: 0; margin: 18px 0; font-size: 12px; color: #18332d; }
+.temperature-legend li { display: flex; align-items: center; gap: 7px; }
