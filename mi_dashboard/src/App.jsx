@@ -5,6 +5,8 @@ import MotorTemperatures from './MotorTemperatures'
 import TemperatureBadge from './TemperatureBadge'
 import FootDiagram from './FootDiagram'
 import OrientationPanel from './OrientationPanel'
+import ImuHistoryChart from './ImuHistoryChart'
+import { appendImuSample } from './imuHistory'
 import SampleCapture from './SampleCapture'
 import { connectTelemetry } from './telemetryConnection'
 
@@ -18,16 +20,18 @@ export default function App() {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [history, setHistory] = useState([])
+  const [imuHistory, setImuHistory] = useState([])
 
   useEffect(() => {
     if (!endpoint) return
     return connectTelemetry(endpoint, {
       info: setInfo,
       state: (nextStatus, message) => { setStatus(nextStatus); setError(message) },
-      reset: () => { setData(null); setHistory([]) },
+      reset: () => { setData(null); setHistory([]); setImuHistory([]) },
       snapshot: snapshot => {
         setData(snapshot)
         const time = performance.now() / 1000
+        setImuHistory(previous => appendImuSample(previous, time, snapshot.imu))
         const readings = Object.fromEntries(snapshot.motores.map(m => [m.id, m]))
         setHistory(previous => [...previous.filter(sample => time - sample.time <= 30), { time, readings }].slice(-600))
       },
@@ -49,6 +53,7 @@ export default function App() {
   function disconnect() {
     setEndpoint('')
     setHistory([])
+    setImuHistory([])
     setData(null)
     setInfo(null)
     setError('')
@@ -71,6 +76,7 @@ export default function App() {
       </section>
       <SampleCapture data={data} info={info} live={status === 'En vivo'} />
       <OrientationPanel imu={data?.imu} live={status === 'En vivo'} />
+      <ImuHistoryChart history={imuHistory} live={status === 'En vivo'} />
       <MotorTemperatures motors={data?.motores || []} mode={info?.modo} />
       <AngleChart key={info?.modelo || 'none'} history={history} motors={data?.motores || []} live={status === 'En vivo'} />
       <section className="panel"><div className="section-title"><h2>Motores</h2><span>Ángulo, velocidad angular, temperatura y torque</span></div>
