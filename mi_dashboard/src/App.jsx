@@ -8,6 +8,7 @@ import OrientationPanel from './OrientationPanel'
 import ImuHistoryChart from './ImuHistoryChart'
 import { appendImuSample } from './imuHistory'
 import SampleCapture from './SampleCapture'
+import BatteryPanel from './BatteryPanel'
 import { connectTelemetry } from './telemetryConnection'
 
 const number = (value, unit = '') => Number.isFinite(value) ? `${value.toFixed(1)}${unit}` : '—'
@@ -74,6 +75,7 @@ export default function App() {
         <article><h2>Batería</h2><strong>{number(data?.bms?.soc, '%')}</strong><p>Carga disponible</p></article>
         <article><h2>Inclinación</h2><strong>{number(data?.imu?.pitch, '°')}</strong><p>Pitch · Roll {number(data?.imu?.roll, '°')} · Yaw {number(data?.imu?.yaw, '°')}</p></article>
       </section>
+      <BatteryPanel bms={data?.bms} live={status === 'En vivo'} />
       <SampleCapture data={data} info={info} live={status === 'En vivo'} />
       <OrientationPanel imu={data?.imu} live={status === 'En vivo'} />
       <ImuHistoryChart history={imuHistory} live={status === 'En vivo'} />
