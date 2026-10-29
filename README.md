@@ -2,6 +2,11 @@
 
 Trabajo práctico de Desarrollo de Aplicaciones II (UADE): frontend React que visualiza telemetría de robots Unitree.
 
+# Integrantes
+- Riva Santiago LU: 1105187
+- Moens Rodrigo LU: 1158518
+- Sahonero Didier LU: 1144813
+
 ## Contenido
 
 - `mi_dashboard/`: frontend React + Vite desarrollado para el TP.
